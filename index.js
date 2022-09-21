@@ -89,8 +89,41 @@ const intern = [
     }
 ];
 
-function writeHTML () {
-    writeToFile('./index.HTML', generateHTML(answers));  
+//the call back function to write out prompt yes
+function yesCall (answers) {
+    console.log(answers)
+     if(answers.yes === 'Add Engineer'){
+        inquirer
+        .prompt(engineer)
+        .then(function (){
+            //ansers.yes is included to clear previous answer... hopefully
+            inquirer
+            .prompt(yes)
+            .then(function(answers){
+                 yesCall(answers); 
+            })
+            })
+        }
+    else if(answers.yes === 'Add Intern'){
+        inquirer
+        .prompt(intern)
+        .then(function () {
+            inquirer
+            .prompt(yes)
+            .then(function(answers){
+                 yesCall(answers); 
+                })
+        })
+    }
+    //here return to just finish page. ( which is writing new HTML)
+    else {
+        writeHTML('./index.HTML',generateHTML(answers));
+    }
+
+};
+
+function writeHTML (fileName, data) {
+    fs.writeFile(fileName, data, err => err ? console.log(err) : console.log('Your HTML page has been generated!'));  
 };
 
 //function to run the questions
@@ -107,28 +140,14 @@ inquirer
         .prompt(yes)
         .then(function (answers) {
             //depending on who they choose we will select what to do
-            console.log(answers);
-            if (answers.yes === 'Add Engineer'){
-                inquirer
-                .prompt(engineer)
-                .then(function (answers){
-                    inquirer
-                    .prompt(yes);
-                })
-            }
-            else if(answers.yes === 'Add Intern'){
-                inquirer
-                .prompt(intern)
-            }
-            //here return to just finish page. ( which is writing new HTML)
-            else {
-                writeHTML(answers);
-            }
+
+            //changes so that it gets a call back.
+           yesCall(answers);
         })
     }
     //add function for if they choose no (just build the app at this point)
     else {
-        writeHTML(answers);
+        writeHTML('./index.HTML',generateHTML(answers));
     }
 });
 };
