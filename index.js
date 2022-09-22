@@ -96,7 +96,7 @@ function yesCall (answers) {
         inquirer
         .prompt(engineer)
         .then(function (){
-            //ansers.yes is included to clear previous answer... hopefully
+           //make sure to prompt yes to clear and restart process if we want multiple engineers and interns.
             inquirer
             .prompt(yes)
             .then(function(answers){
@@ -122,6 +122,7 @@ function yesCall (answers) {
 
 };
 
+//function to write HTML!
 function writeHTML (fileName, data) {
     fs.writeFile(fileName, data, err => err ? console.log(err) : console.log('Your HTML page has been generated!'));  
 };
@@ -135,6 +136,7 @@ inquirer
 .then(function (answers){
     // console.log(answers);
     //in this senario if they do agree then the application continues and prompts yes
+    let managerAnswers = answers;
     if(answers.choice === 'Yes'){
         inquirer
         .prompt(yes)
