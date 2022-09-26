@@ -2,7 +2,11 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
 const generateHTML = require('./src/page-generator');
+const Employee = require('./library/Employee');
+const Manager = require('./library/Manager');
 //make a teamManager objectarray
+const employees = [];
+
 const teamManager = [
     {
         type : 'input',
@@ -134,7 +138,9 @@ inquirer
 .prompt(teamManager)
 //with the answers i am then checking what they selected to continue
 .then(function (answers){
+    const manager = new Manager(answers.teamManager, answers.empID, answers.email, answers.officeNum)
     // console.log(answers);
+console.log(manager);
     //in this senario if they do agree then the application continues and prompts yes
     let managerAnswers = answers;
     if(answers.choice === 'Yes'){
